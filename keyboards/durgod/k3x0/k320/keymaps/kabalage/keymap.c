@@ -15,72 +15,37 @@
  */
 #include QMK_KEYBOARD_H
 
-// Layer shorthand
 enum _layer {
-  _BL,
-  _WL,
-  _UL, // Unicode Map
-  _FL,
-  _SL
-};
-
-// Defines the Enumeration for Unicode Map
-//
-// éÉáÁőŐúÚűŰöÜüÜóÓíÍ€
-//
-// BASE(AC|DC|DI)(S|C)
-//   AC - acute (ó)
-//   DC - double acute (ő)
-//   DI - diaeresis (ö)
-//   S  - small (o)
-//   C  - capital (O)
-enum unicode_names {
-  EACS,
-  EACC,
-  AACS,
-  AACC,
-  ODCS,
-  ODCC,
-  UACS,
-  UACC,
-  UDCS,
-  UDCC,
-  ODIS,
-  ODIC,
-  UDIS,
-  UDIC,
-  OACS,
-  OACC,
-  IACS,
-  IACC,
-  EURO
-};
-
-const uint32_t PROGMEM unicode_map[] = {
-  [EACS] = 0x00e9, // é
-  [EACC] = 0x00c9, // É
-  [AACS] = 0x00e1, // á
-  [AACC] = 0x00c1, // Á
-  [ODCS] = 0x0151, // ő
-  [ODCC] = 0x0150, // Ő
-  [UACS] = 0x00fa, // ú
-  [UACC] = 0x00da, // Ú
-  [UDCS] = 0x0171, // ű
-  [UDCC] = 0x0170, // Ű
-  [ODIS] = 0x00f6, // ö
-  [ODIC] = 0x00d6, // Ö
-  [UDIS] = 0x00fc, // ü
-  [UDIC] = 0x00dc, // Ü
-  [OACS] = 0x00f3, // ó
-  [OACC] = 0x00d3, // Ó
-  [IACS] = 0x00ed, // í
-  [IACC] = 0x00cd, // Í
-  [EURO] = 0x20ac  // €
+  _BL, // Base layer
+  _HU, // Hungarian layer
+  _FL, // Function layer
+  _SL  // System layer
 };
 
 enum custom_keycodes {
-  KC_TWBL // toggle windows base layer
+  KC_EAC = SAFE_RANGE,
+  KC_AAC,
+  KC_UAC,
+  KC_ODI,
+  KC_UDI,
+  KC_OAC,
+  KC_IAC,
+  KC_ODA,
+  KC_UDA
 };
+
+const uint16_t custom_keycodes_map[] = {
+  KC_E, // KC_EAC
+  KC_A, // KC_AAC
+  KC_U, // KC_UAC
+  KC_P, // KC_ODI
+  KC_Y, // KC_UDI
+  KC_O, // KC_OAC
+  KC_I, // KC_IAC
+  KC_O, // KC_ODA
+  KC_U  // KC_UDA
+};
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Keymap _WBL: Windows Base Layer (Default Layer)
@@ -103,27 +68,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,     KC_PSCR, KC_SLCK, KC_PAUS,
       KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,    KC_INS,  KC_HOME, KC_PGUP,
       KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,    KC_DEL,  KC_END,  KC_PGDN,
-      KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
+      LT(_HU, KC_CAPS), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
       KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,             KC_UP,
       KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, TT(_FL), KC_APP,  KC_RCTL,    KC_LEFT, KC_DOWN, KC_RGHT
   ),
-  // [_WBL] = LAYOUT_tkl_ansi( /* Windows Base Layer */
-  //     KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,     KC_PSCR, KC_SLCK, KC_PAUS,
-  //     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,    KC_INS,  KC_HOME, KC_PGUP,
-  //     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,    KC_DEL,  KC_END,  KC_PGDN,
-  //     LT(_UL, KC_CAPS), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
-  //     KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,             KC_UP,
-  //     KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, TT(_FL), KC_APP,  KC_RCTL,    KC_LEFT, KC_DOWN, KC_RGHT
-  // ),
-  [_WL] = LAYOUT_tkl_ansi( /* Windows Layer */
-        _______,                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______,
-        LT(_UL, KC_CAPS), _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______,                   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,             _______,
-        _______,          _______, _______,                            _______,                            _______, _______, _______, _______,    _______, _______, _______
-  ),
-  /* Keymap _UL: Unicode Layer
+  /* Keymap _HU: Hungarian Layer
    * ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
    * │   │   │   │   │   │   │ │   │   │   │   │ │   │   │   │   │ │   │   │   │
    * └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
@@ -139,13 +88,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * │    │    │    │                        │    │    │    │    │ │   │   │   │ │       │   │   │
    * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘ └───────┴───┴───┘
    */
-  [_UL] = LAYOUT_tkl_ansi( /* Unicode Layer */
-        _______,          _______, _______, _______, _______, _______, _______, _______,        _______, _______,        _______,        _______,        _______,           _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______,        _______, _______,        XP(UDIS, UDIC), XP(OACS, OACC), _______,           _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, XP(IACS, IACC), _______, _______,        XP(ODCS, ODCC), XP(UACS, UACC), XP(UDCS, UDCC),    _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______,        _______, XP(EACS, EACC), XP(AACS, AACC),                 _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______,        _______, _______,        _______,                        _______,                    _______,
-        _______, _______, _______,                            _______,                                   _______,        _______,        _______,        _______,           _______, _______, _______
+  [_HU] = LAYOUT_tkl_ansi( /* Hungarian Layer */
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_ODI,  KC_UDI,  KC_OAC,  _______,           _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, KC_IAC,  _______, _______, KC_ODA,  KC_UAC,  KC_UDA,            _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_EAC,  KC_AAC,           _______,
+        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,                    _______,
+        _______, _______, _______,                            _______,                            _______, _______, _______, _______,           _______, _______, _______
   ),
   /* Keymap _FL: Function Layer
    * ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
@@ -164,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘ └───────┴───┴───┘
    */
   [_FL] = LAYOUT_tkl_ansi( /* Function Layer */
-        _______,          KC_MPLY, KC_MSTP, KC_MPRV, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU, _______, _______, _______, _______, TG(_WL),    _______, _______, KC_MUTE,
+        _______,          KC_MPLY, KC_MSTP, KC_MPRV, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU, _______, _______, _______, _______, _______,    _______, _______, KC_MUTE,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, KC_VOLU,
         _______, KC_WH_U, KC_WH_D, KC_MS_U, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, KC_VOLD,
         _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,          _______,
@@ -197,15 +146,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
-// uint32_t init_delay(uint32_t trigger_time, void *cb_arg) {
-//   // off_all_leds();
-//   return 0;
-// }
+uint8_t modState;
 
-// void keyboard_post_init_user(void) {
-//   // on_all_leds();
-//   defer_exec(3000, init_delay, NULL);
-// }
+uint16_t get_custom_keycode_mapping(uint16_t keycode) {
+  return custom_keycodes_map[keycode - SAFE_RANGE];
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -215,22 +160,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         on_all_leds();
       }
       break;
-    // case KC_TWBL:
-    //   if (record->event.pressed) {
-    //     if (IS_LAYER_ON(_WBL)) {
-    //       // default_layer_set(_BL);
-    //       layer_off(_WBL);
-    //       // set_unicode_input_mode(UC_LNX);
-    //       writePin(LED_MR_LOCK_PIN, true);
-    //     } else {
-    //       // default_layer_set(_WBL);
-    //       layer_on(_WBL);
-    //       // layer_off(_BL);
-    //       // set_unicode_input_mode(UC_WINC);
-    //       writePin(LED_MR_LOCK_PIN, false);
-    //     }
-    //   }
-    //   break;
+
+    case KC_EAC ... KC_IAC: //
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        tap_code(get_custom_keycode_mapping(keycode));
+        unregister_code(KC_RALT);
+        return false;
+      }
+      break;
+    case KC_ODA ... KC_UDA: // ő, ű
+      if (record->event.pressed) {
+        // register double acute
+        modState = get_mods();
+        clear_mods();
+        register_code(KC_RALT);
+        register_code(KC_RSFT);
+        tap_code(KC_2);
+        unregister_code(KC_RSFT);
+        unregister_code(KC_RALT);
+        set_mods(modState);
+
+        tap_code(get_custom_keycode_mapping(keycode));
+        return false;
+      }
+      break;
   }
   return true;
 }
@@ -242,29 +196,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // #define LED_MR_LOCK_PIN     A10
 // #define LED_PIN_ON_STATE    0
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-  if (IS_LAYER_ON_STATE(state, _WL)) {
-    writePin(LED_MR_LOCK_PIN, false);
-  } else {
-    writePin(LED_MR_LOCK_PIN, true);
-  }
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//   if (IS_LAYER_ON_STATE(state, _WL)) {
+//     writePin(LED_MR_LOCK_PIN, false);
+//   } else {
+//     writePin(LED_MR_LOCK_PIN, true);
+//   }
 
-  if (IS_LAYER_ON_STATE(state, _FL) || IS_LAYER_ON_STATE(state, _UL)) {
-    writePin(LED_WIN_LOCK_PIN, false);
-  } else {
-    writePin(LED_WIN_LOCK_PIN, true);
-  }
-  return state;
-}
+//   if (IS_LAYER_ON_STATE(state, _FL)) {
+//     writePin(LED_WIN_LOCK_PIN, false);
+//   } else {
+//     writePin(LED_WIN_LOCK_PIN, true);
+//   }
+//   return state;
+// }
 
-void suspend_power_down_user(void) {
-  // code will run multiple times while keyboard is suspended
-  writePin(LED_MR_LOCK_PIN, true);
-}
+// void suspend_power_down_user(void) {
+//   // code will run multiple times while keyboard is suspended
+//   writePin(LED_MR_LOCK_PIN, true);
+// }
 
-void suspend_wakeup_init_user(void) {
-  // code will run on keyboard wakeup
-  writePin(LED_MR_LOCK_PIN, !IS_LAYER_ON(_WL));
-  writePin(LED_WIN_LOCK_PIN, !IS_LAYER_ON(_FL));
-}
+// void suspend_wakeup_init_user(void) {
+//   // code will run on keyboard wakeup
+//   writePin(LED_MR_LOCK_PIN, !IS_LAYER_ON(_WL));
+//   writePin(LED_WIN_LOCK_PIN, !IS_LAYER_ON(_FL));
+// }
 
