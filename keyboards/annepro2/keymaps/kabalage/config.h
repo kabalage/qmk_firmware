@@ -1,11 +1,7 @@
 #pragma once
 
-#define WINLOCK_DISABLED
-// #define PERMISSIVE_HOLD
-#define HOLD_ON_OTHER_KEY_PRESS
-
-#undef DEBOUNCE
-#define DEBOUNCE 15
+// #define HOLD_ON_OTHER_KEY_PRESS
+#define IGNORE_MOD_TAP_INTERRUPT
 
 #define MK_3_SPEED                    // Enable constant cursor speeds
 #define MK_MOMENTARY_ACCEL            // Enable momentary speed selection
